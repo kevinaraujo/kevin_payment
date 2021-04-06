@@ -1,0 +1,12 @@
+version: '3.3'
+
+services: 
+  web:
+    container_name: 'kevin_payment_web'
+    build:
+      context: ./web
+    volumes: 
+      - ./web:/app
+    ports:
+      - 3010:3000
+    
