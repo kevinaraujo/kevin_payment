@@ -13,3 +13,7 @@ Open [http://localhost:3010](http://localhost:3010) to view it in the browser.
 ## Documentation
 
 To see which endpoints is available in api project, paste the content from `/api/docs/swagger.yml` into [https://editor.swagger.io/](https://editor.swagger.io/) website.
+
+## Tests
+
+To run integration and unit tests, access the api container with command `docker-compose exec api bash` and later run `composer test`.
