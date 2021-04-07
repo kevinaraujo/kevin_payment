@@ -38,8 +38,26 @@ services:
       - ./nginx/log:/etc/log/nginx
     networks:
       - kevin_bridge
+  db:
+    container_name: 'kevin_payment_db'
+    image: mysql:5.7
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_DATABASE: kevin_payment
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    networks:
+      - kevin_bridge
 
 networks:
   kevin_bridge:
     driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
     

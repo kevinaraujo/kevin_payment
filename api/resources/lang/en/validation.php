@@ -130,9 +130,21 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'name' => [
+            'required' => 'MISSING_PARAM'
         ],
+        'email' => [
+            'required' => 'MISSING_PARAM',
+            'email' => 'INVALID_EMAIL'
+        ],
+        'document' => [
+            'required' => 'MISSING_PARAM'
+        ],
+        'password' => [
+            'required' => 'MISSING_PARAM',
+            'min' => 'INVALID_PASSWORD',
+            'max' => 'INVALID_PASSWORD'
+        ]
     ],
 
     /*

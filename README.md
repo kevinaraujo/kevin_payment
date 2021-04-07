@@ -16,4 +16,8 @@ To see which endpoints is available in api project, paste the content from `/api
 
 ## Tests
 
-To run integration and unit tests, access the api container with command `docker-compose exec api bash` and later run `composer test`.
+To run integration and unit tests, access the api container with command: `docker-compose exec api composer test`
+
+## Migrate and Seed Database
+
+Run the following command to build your database with initial informations: `php artisan migrate:fresh --seed`
