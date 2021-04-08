@@ -12,7 +12,7 @@ class FormatDocument
         $this->document = $document;
     }
 
-    public function execute() : string
+    public function getDocument() : string
     {
         return $this->document;
     }

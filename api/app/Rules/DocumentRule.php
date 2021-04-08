@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Services\Format\FormatDocument;
 use Illuminate\Contracts\Validation\Rule;
 
 class DocumentRule implements Rule
@@ -24,10 +25,11 @@ class DocumentRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $document = preg_replace('/\.|\-|\//', '', $value);
+        $formatDocument = new FormatDocument($value);
+        $document = $formatDocument->getDocument();
         $lengths = [11, 14];
 
-        if (!in_array( strlen($document), $lengths)) {
+        if (!in_array(strlen($document), $lengths)) {
             return false;
         }
 

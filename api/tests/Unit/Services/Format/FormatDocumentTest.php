@@ -18,7 +18,7 @@ class FormatDocumentTest extends TestCase
         $expected = preg_replace('/\.|\-|\//', '', $document);
 
         $formatDocument = new FormatDocument($document);
-        $response = $formatDocument->execute();
+        $response = $formatDocument->getDocument();
 
         $this->assertEquals($expected, $response);
     }
@@ -31,7 +31,7 @@ class FormatDocumentTest extends TestCase
         $expected = preg_replace('/\.|\-|\//', '', $document);
 
         $formatDocument = new FormatDocument($document);
-        $response = $formatDocument->execute();
+        $response = $formatDocument->getDocument();
 
         $this->assertEquals($expected, $response);
     }

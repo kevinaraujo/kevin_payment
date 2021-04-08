@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class IndexControllerTest extends TestCase
 {
-    public function testHealthCheck()
+    public function testHealthCheck() : void
     {
         $response = $this->get('/api');
 

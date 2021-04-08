@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Unit\Services\Register;
+namespace Tests\Unit\Services\User;
 
 use App\Models\User;
 use Faker\Factory;
 use Faker\Provider\pt_BR\Person;
 use PHPUnit\Framework\TestCase;
-use App\Services\Register\CheckIfUserExists;
+use App\Services\User\ThrowRightUserMessageException;
 
-class CheckIfUserExistsTest extends TestCase
+class ThrowRightUserMessageExceptionTest extends TestCase
 {
-    public function testUserDocumentExistsThrowsException()
+    public function testUserDocumentExistsThrowsException() : void
     {
         $this->expectExceptionMessage('DOCUMENT_EXISTS');
 
@@ -27,10 +27,10 @@ class CheckIfUserExistsTest extends TestCase
         $email = $faker->email;
         $document = $user->document;
 
-        CheckIfUserExists::execute($user, $email, $document);
+        ThrowRightUserMessageException::execute($user, $email, $document);
     }
 
-    public function testUserEmailExistsThrowsException()
+    public function testUserEmailExistsThrowsException() : void
     {
         $this->expectExceptionMessage('EMAIL_EXISTS');
 
@@ -47,6 +47,6 @@ class CheckIfUserExistsTest extends TestCase
         $email = $user->email;
         $document = $faker->cpf;
 
-        CheckIfUserExists::execute($user, $email, $document);
+        ThrowRightUserMessageException::execute($user, $email, $document);
     }
 }

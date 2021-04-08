@@ -5,6 +5,7 @@ use \Faker\Provider\pt_BR\Person;
 use \Faker\Provider\pt_BR\Company;
 use \App\Models\UserType;
 use \App\Models\User;
+use \Illuminate\Support\Facades\Hash;
 
 class UserTableSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => $faker->name,
             'email' => 'shopkeeper@payment.com',
-            'password' => $faker->password,
+            'password' => Hash::make(12345678),
             'document' => $faker->cnpj(false),
             'balance' => 1100,
             'user_type_id' => $userType->id
@@ -35,7 +36,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => $faker->name,
             'email' => 'client@payment.com',
-            'password' => $faker->password,
+            'password' => Hash::make($faker->password),
             'document' => $faker->cpf(false),
             'balance' => 900,
             'user_type_id' => $userType->id

@@ -10,14 +10,14 @@ use PHPUnit\Framework\TestCase;
 
 class DocumentTest extends TestCase
 {
-    public function testCpfHasLassNumbersReturnsFalse()
+    public function testCpfHasLessNumbersReturnsFalse()
     {
         $documentRule = new DocumentRule();
         $response = $documentRule->passes( 'document', '23.214.555.7');
         $this->assertFalse($response);
     }
 
-    public function testCnpjHasLassNumbersReturnsFalse()
+    public function testCnpjHasLessNumbersReturnsFalse()
     {
         $documentRule = new DocumentRule();
         $response = $documentRule->passes( 'document', '23.214.555.7');
