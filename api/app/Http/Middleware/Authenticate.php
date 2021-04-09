@@ -2,20 +2,37 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use App\Services\Auth\Jwt;
+use Closure;
+use Illuminate\Http\Response;
+use \Emarref\Jwt\Exception\VerificationException;
 
-class Authenticate extends Middleware
+class Authenticate
 {
     /**
-     * Get the path the user should be redirected to when they are not authenticated.
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return string|null
+     * @param  \Closure  $next
+     * @return mixed
      */
-    protected function redirectTo($request)
+    public function handle($request, Closure $next)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+        try {
+            $accessToken = $request->bearerToken();
+
+            $jwt = new Jwt();
+            $jwt->validate($accessToken);
+
+            return $next($request);
+
+        } catch (VerificationException | \Exception $ex) {
+
+            return response()->json([
+                'message' => 'INVALID_CREDENTIALS'
+            ], Response::HTTP_UNAUTHORIZED);
+
         }
     }
+
 }

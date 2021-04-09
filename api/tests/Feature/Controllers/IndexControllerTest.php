@@ -1,16 +1,17 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class IndexControllerTest extends TestCase
 {
-    public function testHealthCheck() : void
+    public function testHealthCheck(): void
     {
         $response = $this->get('/api');
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([ 'message' => 'success']);
     }
 }

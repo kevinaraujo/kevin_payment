@@ -1,19 +1,17 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use Faker\Factory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class AuthControllerTest extends TestCase
 {
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testAuthIsOk(array $data) : void
+    public function testAuthIsOk(array $data): void
     {
         $postData = [
             'email' => $data['email'],
@@ -22,7 +20,7 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post('/api/auth', $postData);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonStructure([
             'message',
             'access_token'
@@ -30,9 +28,9 @@ class AuthControllerTest extends TestCase
     }
 
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testAuthPasswordIncorrectReturnsNotAuthenticated(array $data) : void
+    public function testAuthPasswordIncorrectReturnsNotAuthenticated(array $data): void
     {
         $faker = Factory::create();
 
@@ -43,7 +41,7 @@ class AuthControllerTest extends TestCase
 
         $response = $this->post('/api/auth', $postData);
 
-        $response->assertStatus(401);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
         $response->assertJson(['message' => 'INVALID_CREDENTIALS']);
     }
 }

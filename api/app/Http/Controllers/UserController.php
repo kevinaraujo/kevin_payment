@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UserType;
 use App\Rules\DocumentRule;
 use App\Rules\EmailRule;
 use App\Services\Format\FormatDocument;
 use App\Services\User\CheckIfUserExists;
 use App\Services\User\SetupUser;
 use Illuminate\Http\Request;
-use Emarref\Jwt\Claim;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use \Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    public function index(Request $request) : JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
 
@@ -41,17 +41,48 @@ class UserController extends Controller
 
             return response()->json([
                 'message' => 'success'
-            ], 201);
+            ], Response::HTTP_CREATED);
 
-        } catch (\Illuminate\Validation\ValidationException $e ) {
+        } catch (ValidationException $ex ) {
+
             return response()->json([
-                'message' => $e->errors()
-            ],400);
+                'message' => $ex->errors()
+            ],Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $ex) {
             return response()->json([
                 'message' => $ex->getMessage()
-            ], $ex->getCode() ? $ex->getCode() : 400);
+            ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function paymentTypes(string $userId, Request $request): JsonResponse
+    {
+        try {
+
+            $user = User::find($userId);
+
+            if (!$user) {
+                throw new \Exception(
+                    'USER_NOT_FOUND',
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $paymentTypes = [];
+            foreach ($user->userPayments as $userPayment) {
+                $paymentTypes[$userPayment->paymentType->id] = $userPayment->paymentType->description;
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'payment_types' => $paymentTypes
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'message' => $ex->getMessage()
+            ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
         }
     }
 }

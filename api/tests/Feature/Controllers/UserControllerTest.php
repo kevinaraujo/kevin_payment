@@ -1,16 +1,17 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Models\User;
 use App\Services\Format\FormatDocument;
 use Faker\Factory;
 use Faker\Provider\pt_BR\Person;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    public function testCreateUserOk() : array
+    public function testCreateUserOk(): array
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -32,7 +33,7 @@ class UserControllerTest extends TestCase
             ->first();
 
         $this->assertIsObject((new User()), $user);
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson([ 'message' => 'success']);
 
         return [
@@ -42,7 +43,7 @@ class UserControllerTest extends TestCase
         ];
     }
 
-    public function testCreateUserMissingNameParamReturnsBadRequest() : void
+    public function testCreateUserMissingNameParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -59,11 +60,11 @@ class UserControllerTest extends TestCase
             'name' => ['MISSING_PARAM']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserMissingEmailParamReturnsBadRequest() : void
+    public function testCreateUserMissingEmailParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -79,11 +80,11 @@ class UserControllerTest extends TestCase
             'email' => ['MISSING_PARAM']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserMissingDocumentParamReturnsBadRequest() : void
+    public function testCreateUserMissingDocumentParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -99,11 +100,11 @@ class UserControllerTest extends TestCase
             'document' => ['MISSING_PARAM']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserMissingPasswordParamReturnsBadRequest() : void
+    public function testCreateUserMissingPasswordParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -119,11 +120,11 @@ class UserControllerTest extends TestCase
             'password' => ['MISSING_PARAM']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserShortPasswordParamReturnsBadRequest() : void
+    public function testCreateUserShortPasswordParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -140,11 +141,11 @@ class UserControllerTest extends TestCase
             'password' => ['INVALID_PASSWORD']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserLongPasswordParamReturnsBadRequest() : void
+    public function testCreateUserLongPasswordParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -161,11 +162,11 @@ class UserControllerTest extends TestCase
             'password' => ['INVALID_PASSWORD']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
-    public function testCreateUserInvalidEmailParamReturnsBadRequest() : void
+    public function testCreateUserInvalidEmailParamReturnsBadRequest(): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -182,14 +183,14 @@ class UserControllerTest extends TestCase
             'email' => ['INVALID_EMAIL']
         ]];
 
-        $response->assertStatus(400);
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
         $response->assertJson($message);
     }
 
     /**
      * @depends testCreateUserOk
      */
-    public function testCreateUserExistentEmailParamReturnsConflitResponse(array $data) : void
+    public function testCreateUserExistentEmailParamReturnsConflitResponse(array $data): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -204,14 +205,14 @@ class UserControllerTest extends TestCase
         $response = $this->post('/api/users', $data);
         $message = [ 'message' => 'EMAIL_EXISTS'];
 
-        $response->assertStatus(409);
+        $response->assertStatus(Response::HTTP_CONFLICT);
         $response->assertJson($message);
     }
 
     /**
      * @depends testCreateUserOk
      */
-    public function testCreateUserExistentDocumentParamReturnsConflitResponse(array $data) : void
+    public function testCreateUserExistentDocumentParamReturnsConflitResponse(array $data): void
     {
         $faker = Factory::create();
         $faker->addProvider(new Person($faker));
@@ -226,7 +227,37 @@ class UserControllerTest extends TestCase
         $response = $this->post('/api/users', $data);
         $message = [ 'message' => 'DOCUMENT_EXISTS'];
 
-        $response->assertStatus(409);
+        $response->assertStatus(Response::HTTP_CONFLICT);
         $response->assertJson($message);
+
+    }
+
+    public function testGetPaymentTypesButUserDoesntExistReturnsNotFound(): void
+    {
+        $this->withoutMiddleware();
+
+        $response = $this->get('/api/users/100000000000/payments-types');
+        $message = [ 'message' => 'USER_NOT_FOUND'];
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertJson($message);
+    }
+
+    /**
+     * @depends testCreateUserOk
+     */
+    public function testGetPaymentTypesReturnsOk(array $data) : void
+    {
+        $this->withoutMiddleware();
+
+        $user = User::where('document', $data['document'])->first();
+
+        $response = $this->get(sprintf('/api/users/%s/payments-types',$user->id));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonStructure([
+            'message',
+            'payment_types'
+        ]);
     }
 }

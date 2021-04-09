@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Rules\EmailRule;
 use App\Services\Auth\Jwt;
 use App\Services\User\AuthenticateUser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use \Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function index(Request $request) : JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
 
@@ -43,20 +42,16 @@ class AuthController extends Controller
                 'access_token' => $newJwt
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e ) {
-            return response()->json([
-                'message' => $e->errors()
-            ],400);
+        } catch (ValidationException $ex ) {
 
-        } catch (\Emarref\Jwt\Exception\VerificationException $ex) {
             return response()->json([
                 'message' => $ex->errors()
-            ],400);
+            ],Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $ex) {
             return response()->json([
                 'message' => $ex->getMessage()
-            ], $ex->getCode() ? $ex->getCode() : 400);
+            ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
         }
     }
 }

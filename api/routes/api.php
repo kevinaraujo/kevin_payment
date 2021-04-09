@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(\App\Http\Middleware\Authorize::class)->group(function () {
+Route::middleware(\App\Http\Middleware\Authenticate::class)->group(function () {
     Route::post('/transactions', 'TransactionsController@index')->name('transactions.create');
+    Route::get('/users/{userId}/payments-types', 'UserController@paymentTypes')->name('user.payment_types.get');
 });
 
 Route::get('/', 'IndexController@index')->name('healthcheck');

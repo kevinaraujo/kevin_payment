@@ -32,8 +32,9 @@ class CreateTransactionsTable extends Migration
                 ->on('users_payments');
 
             $table->decimal('value');
-            $table->decimal('discount');
             $table->string('description');
+            $table->string('status',20);
+            $table->string('status_message')->nullable();
             $table->timestamps();
         });
     }

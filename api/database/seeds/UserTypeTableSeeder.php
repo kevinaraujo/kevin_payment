@@ -20,7 +20,7 @@ class UserTypeTableSeeder extends Seeder
 
         UserType::create([
             'code' => 'client',
-            'description' => 'Shopkeeper profile',
+            'description' => 'Client profile',
             'sends_money' => true
         ]);
     }

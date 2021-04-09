@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function testJwtGeneratedOk() : string
+    public function testJwtGeneratedOk(): string
     {
         $faker = FakerFactory::create();
         $faker->addProvider(new Person($faker));
@@ -36,16 +36,16 @@ class JwtTest extends TestCase
     /**
      * @depends testJwtGeneratedOk
      */
-    public function testJwtIsValidOk(string $newJwt) : void
+    public function testJwtIsValidOk(string $newJwt): void
     {
         $jwt = new Jwt();
         $jwtIsValid = $jwt->validate($newJwt);
         $this->assertTrue($jwtIsValid);
     }
 
-    public function testJwtIsNotValidOk() : void
+    public function testJwtIsNotValidThrowsException(): void
     {
-        $this->expectExceptionObject((new InvalidSignatureException()));
+        $this->expectException(InvalidSignatureException::class);
         $oldJwt = 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTc4OTcxMjQsIm5vbWUiOiJ0ZXN0ZSJ9.e4Vb3v40O4d1FN_P1RKk8h37DA0gBDQQ3sZb_YdWU1E';
 
         $jwt = new Jwt();

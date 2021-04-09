@@ -10,9 +10,9 @@ use Tests\TestCase;
 class CheckIfUserExistsTest extends TestCase
 {
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testUserExistThrowsException(array $data) : void
+    public function testUserExistThrowsException(array $data): void
     {
         $this->expectExceptionMessage('EMAIL_EXISTS');
 

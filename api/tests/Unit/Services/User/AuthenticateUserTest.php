@@ -10,9 +10,9 @@ use Tests\TestCase;
 class AuthenticateUserTest extends TestCase
 {
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testAuthenticateUserWrongEmailThrowsException(array $data) : void
+    public function testAuthenticateUserWrongEmailThrowsException(array $data): void
     {
         $this->expectExceptionCode(401);
         $this->expectExceptionMessage('INVALID_CREDENTIALS');
@@ -26,9 +26,9 @@ class AuthenticateUserTest extends TestCase
     }
 
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testAuthenticateUserWrongPasswordThrowsException(array $data) : void
+    public function testAuthenticateUserWrongPasswordThrowsException(array $data): void
     {
         $this->expectExceptionCode(401);
         $this->expectExceptionMessage('INVALID_CREDENTIALS');
@@ -42,9 +42,9 @@ class AuthenticateUserTest extends TestCase
     }
 
     /**
-     * @depends Tests\Feature\UserControllerTest::testCreateUserOk
+     * @depends Tests\Feature\Controllers\UserControllerTest::testCreateUserOk
      */
-    public function testAuthenticateUserExistsOk(array $data) : void
+    public function testAuthenticateUserExistsOk(array $data): void
     {
         $user = AuthenticateUser::execute(
             $data['email'],
