@@ -22,7 +22,6 @@
 /web/yarn-debug.log*
 /web/yarn-error.log*
 
-
-/nginx/log
-/dbdata
+/storage/log
+/storage/dbdata
 .idea
