@@ -1,0 +1,81 @@
+swagger: "2.0"
+info:
+  description: "This is as simple api to make transactions between users."
+  version: "1.0.0"
+  title: "Kevin Payment"
+schemes:
+  - "https"
+paths:
+  /api:
+    get:
+      tags:
+        - "Healthcheck"
+      summary: "Check if the api is ok"
+      description: ""
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+        "400":
+          description: "Some error"
+
+  /api/users:
+    post:
+      tags:
+        - "Users"
+      summary: "Register a user"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Object that needs to be register a user"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              name:
+                type: "string"
+              document:
+                type: "string"
+              email:
+                type: "string"
+              password:
+                type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+        "400":
+          description: "Some error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+        "409":
+          description: "Email or document exist exists already"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                enum:
+                  - "DOCUMENT_EXISTS"
+                  - "EMAIL_EXISTS"
+
