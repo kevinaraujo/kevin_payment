@@ -1,6 +1,6 @@
 # Kevin Payment App
 
-This project based on reactJS to front end (I could't finish it becuse of time) and Laravel to backend. I'm using docker and docker-compose to run.
+This project based on reactJS to front end (I could't finish it because of time) and Laravel to backend. I'm using docker and docker-compose to run.
 
 ## Getting Started
 
@@ -44,7 +44,7 @@ A test coverage report file will be generated in **api/reports/index.html**. Ope
 
 If you want test the endpoint via postman, import the **postman.json** from **/api/docs** to your postman software.
 
-## Queues
+## Queue
 
-Transactions need to have job listeners turned on to access queues jobs and finish it.  
-Run `docker-compose exec api php artisan queue:listen --queue=validate_transaction` in the terminal. 
+Transactions need to have job listener turned on to validate a transaction and finish it.  
+Access the container by run `docker-compose exec api bash` and later run `php artisan queue:listen --queue=validate_transaction` to turn on. 
