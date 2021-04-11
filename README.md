@@ -32,7 +32,7 @@ Run the following command to build your database with initial informations: `doc
 
 ## Documentation
 
-To see which endpoints is available in api project, paste the content from `/api/docs/swagger.yml` into [https://editor.swagger.io/](https://editor.swagger.io/) website.
+To see which endpoints is available in api project, paste the content from **/api/docs/swagger.yml** into [https://editor.swagger.io/](https://editor.swagger.io/) website.
 
 ## Tests
 
@@ -40,6 +40,11 @@ To run integration and unit tests, access the api container with command `docker
 
 After access the container, run `composer test`.
 
-A test coverage report file will be generated in `api/reports/index.html`. Open it in your web browser.
+A test coverage report file will be generated in **api/reports/index.html**. Open it in your web browser.
 
-If you want test the endpoint via postman, import the `postman.json` from `/api/docs` to your postman software.
+If you want test the endpoint via postman, import the **postman.json** from **/api/docs** to your postman software.
+
+## Queues
+
+Transactions need to have job listeners turned on to access queues jobs and finish it.  
+Run `docker-compose exec api php artisan queue:listen --queue=validate_transaction` in the terminal. 

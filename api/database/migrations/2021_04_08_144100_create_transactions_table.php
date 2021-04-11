@@ -34,7 +34,7 @@ class CreateTransactionsTable extends Migration
             $table->decimal('value');
             $table->string('description');
             $table->string('status',20);
-            $table->string('status_message')->nullable();
+            $table->text('status_message')->nullable();
             $table->timestamps();
         });
     }

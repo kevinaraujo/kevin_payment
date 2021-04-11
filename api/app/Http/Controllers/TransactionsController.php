@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ValidateTransactionJob;
 use App\Models\Transaction;
-use App\Models\User;
 use App\Services\Payment\CheckIfPayerCanSendMoney;
 use App\Services\Payment\CheckIfUserPaymentIsAvailable;
 use App\Services\Payment\CheckIfUsersExist;
-use App\Services\Payment\UpdateUsersBalance;
-use App\Services\Payment\ValidateTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -53,15 +51,7 @@ class TransactionsController extends Controller
                 'status' => Transaction::STATUS_PENDING
             ]);
 
-            $validateTransaction = new ValidateTransaction($transaction);
-            $response = $validateTransaction->execute();
-
-            DB::beginTransaction();
-
-            $updateUserBalance = new UpdateUsersBalance($transaction);
-            $response = $updateUserBalance->execute();
-
-            DB::commit();
+            ValidateTransactionJob::dispatch($transaction);
 
             return response()->json([
                 'message' => 'success'

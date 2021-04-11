@@ -275,7 +275,7 @@ class UserControllerTest extends TestCase
     /**
      * @depends testCreateUserOk
      */
-    public function testUserBalanceReturnsOk(array $data) : void
+    public function testGetUserBalanceReturnsOk(array $data) : void
     {
         $this->withoutMiddleware();
 
