@@ -88,7 +88,10 @@ class TransactionsControllerTest extends TestCase
         $response = $this->post('/api/transactions', $this->data, $this->headers);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJson(['message' => 'success']);
+        $response->assertJsonStructure([
+            'message',
+            'id'
+        ]);
 
         return $this->validJwt;
     }

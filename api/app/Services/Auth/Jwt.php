@@ -36,13 +36,21 @@ class Jwt
         return $this->emarrefJwt->serialize( $this->token, $this->encryption);
     }
 
-    public function validate(string $jwt) : bool
+    public function validate(string $jwt) : array
     {
         $token = $this->emarrefJwt->deserialize($jwt);
 
         $context = new Context($this->encryption);
         $jwtIsValid = $this->emarrefJwt->verify($token, $context);
+        $payload = $this->getPayload($token);
 
-        return $jwtIsValid;
+        return $payload;
+    }
+
+    public function getPayload(Token $token): array
+    {
+        $payload = $token->getPayload()->getClaims()->getIterator()['user']->getValue();
+
+        return (array) json_decode($payload);
     }
 }

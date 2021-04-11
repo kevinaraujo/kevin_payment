@@ -4,43 +4,53 @@ namespace Tests\Unit\Auth;
 
 use App\Services\Auth\Jwt;
 use Emarref\Jwt\Exception\InvalidSignatureException;
-use Faker\Factory;
 use Faker\Factory as FakerFactory;
 use Faker\Provider\pt_BR\Person;
-use http\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function testJwtGeneratedOk(): string
+    private $claims;
+
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $faker = FakerFactory::create();
         $faker->addProvider(new Person($faker));
 
-        $claims = [
+        $this->claims = [
             'user' => [
                 'name' => $faker->name,
                 'email' => $faker->email,
                 'document' => $faker->cpf(false)
             ]
         ];
+    }
 
+    public function testJwtGeneratedOk(): array
+    {
         $jwt = new Jwt();
-        $newJwt = $jwt->generate($claims);
-
+        $newJwt = $jwt->generate($this->claims);
         $this->assertNotEmpty($newJwt);
 
-        return $newJwt;
+        return [
+            $newJwt,
+            $this->claims
+        ];
     }
 
     /**
      * @depends testJwtGeneratedOk
      */
-    public function testJwtIsValidOk(string $newJwt): void
+    public function testJwtIsValidOk(array $data): void
     {
+        list($newJwt, $claims) = $data;
+
         $jwt = new Jwt();
-        $jwtIsValid = $jwt->validate($newJwt);
-        $this->assertTrue($jwtIsValid);
+        $payload = $jwt->validate($newJwt);
+
+        $this->assertEquals($claims['user'], $payload);
     }
 
     public function testJwtIsNotValidThrowsException(): void

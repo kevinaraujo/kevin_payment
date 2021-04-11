@@ -22,7 +22,11 @@ class Authenticate
             $accessToken = $request->bearerToken();
 
             $jwt = new Jwt();
-            $jwt->validate($accessToken);
+            $payload = $jwt->validate($accessToken);
+
+            $request->merge([
+                'email' => $payload['email']
+            ]);
 
             return $next($request);
 

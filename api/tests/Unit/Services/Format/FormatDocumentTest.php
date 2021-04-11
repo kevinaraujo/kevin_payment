@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Validation;
+namespace Tests\Unit\Services\Format;
 
 use App\Services\Format\FormatDocument;
 use Faker\Factory;

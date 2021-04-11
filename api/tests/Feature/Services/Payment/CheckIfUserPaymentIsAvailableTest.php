@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Services\Payment;
+namespace Tests\Feature\Services\Payment;
 
 use App\Models\User;
 use App\Services\Payment\CheckIfUserPaymentIsAvailable;

@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Services\Payment\CheckIfPayerCanSendMoney;
 use App\Services\Payment\CheckIfUserPaymentIsAvailable;
 use App\Services\Payment\CheckIfUsersExist;
+use App\Services\Payment\UpdateUsersBalance;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -51,10 +52,14 @@ class TransactionsController extends Controller
                 'status' => Transaction::STATUS_PENDING
             ]);
 
+            $updateUserBalance = new UpdateUsersBalance($transaction);
+            $response = $updateUserBalance->execute();
+
             ValidateTransactionJob::dispatch($transaction);
 
             return response()->json([
-                'message' => 'success'
+                'message' => 'success',
+                'id' => $transaction->id
             ], Response::HTTP_CREATED);
 
         } catch (ValidationException $ex ) {

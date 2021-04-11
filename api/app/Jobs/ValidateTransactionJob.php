@@ -36,10 +36,11 @@ class ValidateTransactionJob implements ShouldQueue
         try {
 
             $validateTransaction = new ValidateTransaction($this->transaction);
-            $response = $validateTransaction->execute();
+            $response = $validateTransaction->execute();           
 
-            $updateUserBalance = new UpdateUsersBalance($this->transaction);
-            $response = $updateUserBalance->execute();
+            $this->transaction->update([
+                'status' => Transaction::STATUS_SUCCESS
+            ]);
 
             DB::commit();
 
@@ -47,6 +48,9 @@ class ValidateTransactionJob implements ShouldQueue
         // @codeCoverageIgnoreStart
         catch (\Exception $ex) {
             DB::rollBack();
+
+            $updateUserBalance = new UpdateUsersBalance($this->transaction, true);
+            $response = $updateUserBalance->execute();
 
             $this->transaction->update([
                 'status' => Transaction::STATUS_ERROR,

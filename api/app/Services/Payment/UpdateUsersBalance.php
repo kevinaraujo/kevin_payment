@@ -9,26 +9,31 @@ use Illuminate\Support\Facades\DB;
 class UpdateUsersBalance
 {
     private $transaction;
+    private $payer;
+    private $payee;
+    private $revert;
 
-    public function __construct(Transaction $transaction)
+    public function __construct(Transaction $transaction, bool $revert = false)
     {
         $this->transaction = $transaction;
+        $this->revert = $revert;
+
+        $this->payer = User::find($transaction->payer_id);
+        $this->payee = User::find($transaction->payee_id);
     }
 
     public function execute(): bool
     {
-        $payer = User::find($this->transaction->payer_id);
-        $payee = User::find($this->transaction->payee_id);
+        $payerBalance = $this->payer->balance - $this->transaction->value;
+        $payeeBalance = $this->payee->balance + $this->transaction->value;
 
-        $payerBalance = $payer->balance - $this->transaction->value;
-        $payeeBalance = $payee->balance + $this->transaction->value;
+        if ($this->revert) {
+            $payerBalance = $this->payer->balance + $this->transaction->value;
+            $payeeBalance = $this->payee->balance - $this->transaction->value;
+        }
 
-        $payer->update(['balance' => $payerBalance]);
-        $payee->update(['balance' => $payeeBalance]);
-
-        $this->transaction->update([
-            'status' => Transaction::STATUS_SUCCESS
-        ]);
+        $this->payer->update(['balance' => $payerBalance]);
+        $this->payee->update(['balance' => $payeeBalance]);
 
         return true;
     }
