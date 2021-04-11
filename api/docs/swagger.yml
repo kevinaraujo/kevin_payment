@@ -134,7 +134,7 @@ paths:
     get:
       tags:
         - "Users"
-      summary: "Return all payment types available to chosen user"
+      summary: "Get all payment types available to chosen user"
       description: ""
       consumes:
         - "application/json"
@@ -156,8 +156,62 @@ paths:
                 type: "string"
                 default: "success"
               payment_types:
+                description: "object with many key value pairs"
                 type: "object"
-                default: {}
+                default: {
+                  1: "wl"
+                }
+        "400":
+          description: "Some error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+        "404":
+          description: "User not found"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "USER_NOT_FOUND"
+
+
+  /api/users/{userId}/balance:
+    get:
+      tags:
+        - "Users"
+      summary: "Get the user balance"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+              user:
+                type: "object"
+                properties:
+                  email:
+                    type: "string"
+                    default: ""
+                  balance:
+                    type: "int64"
+                    default: 10.50
         "400":
           description: "Some error"
           schema:

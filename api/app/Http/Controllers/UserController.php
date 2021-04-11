@@ -88,4 +88,34 @@ class UserController extends Controller
 
         }
     }
+
+    public function balance(string $userId, Request $request): JsonResponse
+    {
+        try {
+
+            $user = User::find($userId);
+
+            if (!$user) {
+                throw new \Exception(
+                    'USER_NOT_FOUND',
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'user' => [
+                    'email' => $user->email,
+                    'balance' => $user->balance
+                ]
+            ], Response::HTTP_OK);
+
+        } catch (\Exception $ex) {
+
+            return response()->json([
+                'message' => $ex->getMessage()
+            ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+
+        }
+    }
 }

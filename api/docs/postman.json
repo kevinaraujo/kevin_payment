@@ -99,6 +99,23 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "User - Get Balance",
+			"request": {
+				"url": "http://localhost:8010/api/users/2/balance",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTgxNzAzODEsInVzZXIiOiJ7XCJuYW1lXCI6XCJTcmEuIExcXHUwMGZhY2lhIEZlcnJlaXJhXCIsXCJlbWFpbFwiOlwic2hvcGtlZXBlckBwYXltZW50LmNvbVwiLFwiZG9jdW1lbnRcIjpcIjgxNjYwMTU4MDAwMTkwXCJ9In0.F6pWm6DBbVu-lzqaS9YN4648bGMqU5D5qQC60B0Wc8E",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

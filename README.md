@@ -4,14 +4,12 @@ This project based on reactJS to front end (I could't finish it becuse of time) 
 
 ## Getting Started
 
-First of all, you need to run the docker command below to setup the web and api projects:
-
-### `docker-compose up -d`
+First of all, you need to run the following docker command to setup the web and api projects:
+`docker-compose up -d`
 
 Open [http://localhost:3010](http://localhost:3010) to view it in the browser.
 
-After up your containers, run:
-`docker-compose exec api php artisan key:generate`
+After up your containers, run `docker-compose exec api php artisan key:generate`
 
 Replace db connection environment variables on your **.env** file for these:
 ```
@@ -38,10 +36,10 @@ To see which endpoints is available in api project, paste the content from `/api
 
 ## Tests
 
-To run integration and unit tests, access the api container with command `docker-compose exec`. 
+To run integration and unit tests, access the api container with command `docker-compose exec api bash`. 
 
-After access the container, run `php -dxdebug.mode=coverage ./vendor/bin/phpunit --testdox --coverage-html reports/`.
+After access the container, run `composer test`.
 
-A test coverage report file will be generated in **api/reports/index.html**. Open it in your web browser.
+A test coverage report file will be generated in `api/reports/index.html`. Open it in your web browser.
 
 If you want test the endpoint via postman, import the `postman.json` from `/api/docs` to your postman software.

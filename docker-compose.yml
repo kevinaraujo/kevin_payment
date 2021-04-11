@@ -26,6 +26,8 @@ services:
       - ./api:/var/www
     networks:
       - kevin_bridge
+    depends_on:
+      - db
       
   nginx:
     container_name: 'kevin_payment_nginx'
@@ -40,6 +42,8 @@ services:
       - ./storage/nginx/log:/etc/log/nginx
     networks:
       - kevin_bridge
+    depends_on:
+      - db
   db:
     container_name: 'kevin_payment_db'
     image: mysql:5.7

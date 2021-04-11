@@ -260,4 +260,36 @@ class UserControllerTest extends TestCase
             'payment_types'
         ]);
     }
+
+    public function testGetUserBalanceButUserDoesntExistReturnsNotFound(): void
+    {
+        $this->withoutMiddleware();
+
+        $response = $this->get('/api/users/100000000000/balance');
+        $message = [ 'message' => 'USER_NOT_FOUND'];
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertJson($message);
+    }
+
+    /**
+     * @depends testCreateUserOk
+     */
+    public function testUserBalanceReturnsOk(array $data) : void
+    {
+        $this->withoutMiddleware();
+
+        $user = User::where('document', $data['document'])->first();
+
+        $response = $this->get(sprintf('/api/users/%s/balance',$user->id));
+
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJson([
+            'message' => 'success',
+            'user' => [
+                'email' => $user->email,
+                'balance' => $user->balance
+            ]
+        ]);
+    }
 }
