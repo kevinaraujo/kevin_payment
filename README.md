@@ -38,5 +38,10 @@ To see which endpoints is available in api project, paste the content from `/api
 
 ## Tests
 
-To run integration and unit tests, access the api container with command: `docker-compose exec api composer test`.
+To run integration and unit tests, access the api container with command `docker-compose exec`. 
+
+After access the container, run `php -dxdebug.mode=coverage ./vendor/bin/phpunit --testdox --coverage-html reports/`.
+
+A test coverage report file will be generated in **api/reports/index.html**. Open it in your web browser.
+
 If you want test the endpoint via postman, import the `postman.json` from `/api/docs` to your postman software.

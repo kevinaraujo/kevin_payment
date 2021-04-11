@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\Payment;
 
 use App\Models\User;
-use App\Services\Payment\CheckIfPayerCanSendMoney;
 use App\Services\Payment\CheckIfUserPaymentIsAvailable;
 use Faker\Factory;
 use Illuminate\Http\Response;

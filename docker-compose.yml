@@ -3,10 +3,12 @@ version: '3.3'
 services: 
   web:
     container_name: 'kevin_payment_web'
+    restart: unless-stopped
     build:
       context: ./web
     volumes: 
       - ./web:/app
+      - /usr/src/app/node_modules
     ports:
       - "3010:3000"
     

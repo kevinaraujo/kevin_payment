@@ -1,10 +1,11 @@
-FROM node:13.12.0-alpine
+FROM node:14
 
 WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
+COPY package.json ./
+COPY yarn.lock ./
 
 RUN npm install
 
+EXPOSE 3000
 CMD ["npm", "start"]

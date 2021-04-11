@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(\App\Http\Middleware\Authenticate::class)->group(function () {
-    Route::post('/transactions', 'TransactionsController@index')->name('transactions.create');
+    Route::post('/transactions', 'TransactionsController@create')->name('transactions.create');
     Route::get('/users/{userId}/payments-types', 'UserController@paymentTypes')->name('user.payment_types.get');
 });
 
 Route::get('/', 'IndexController@index')->name('healthcheck');
 Route::post('/auth', 'AuthController@index')->name('auth');
-Route::post('/users', 'UserController@index')->name('user.create');
+Route::post('/users', 'UserController@create')->name('user.create');
 

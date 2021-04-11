@@ -49,9 +49,11 @@ class AuthController extends Controller
             ],Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $ex) {
+
             return response()->json([
                 'message' => $ex->getMessage()
             ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+
         }
     }
 }

@@ -17,10 +17,13 @@ class IndexController extends Controller
             return response()->json([
                 'message' => 'success'
             ]);
+
         } catch (\Exception $ex) {
+
             return response()->json([
                 'message' => $ex->getMessage()
             ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+
         }
     }
 }

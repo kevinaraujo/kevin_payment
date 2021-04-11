@@ -44,4 +44,19 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
         $response->assertJson(['message' => 'INVALID_CREDENTIALS']);
     }
+
+    public function testMissingEmailParamReturnsBadRequest(): void
+    {
+        $faker = Factory::create();
+
+        $postData = [
+            'email' => '',
+            'password' => $faker->password
+        ];
+
+        $response = $this->post('/api/auth', $postData);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['email' => ['MISSING_PARAM']]]);
+    }
 }

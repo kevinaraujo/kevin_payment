@@ -4,7 +4,6 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\PaymentType;
 use App\Services\Auth\Jwt;
-use Faker\Factory;
 use Faker\Factory as FakerFactory;
 use Faker\Provider\pt_BR\Person;
 use Illuminate\Http\Response;
@@ -13,8 +12,10 @@ use \App\Models\User;
 
 class TransactionsControllerTest extends TestCase
 {
-    private $headers;
     private $validJwt;
+    private $headers;
+    private $data;
+    private $faker;
 
     protected function setUp(): void
     {
@@ -36,6 +37,23 @@ class TransactionsControllerTest extends TestCase
         $this->headers = [
             'Authorization' => sprintf('Bearer %s', $this->validJwt)
         ];
+
+        $faker = FakerFactory::create();
+
+        $client = User::where('email', 'client@payment.com')->first();
+        $shopKeeper = User::where('email', 'shopkeeper@payment.com')->first();
+        $creditCard = PaymentType::where('code', 'cc')->first();
+        $value = $faker->randomFloat(2, 10, 100);
+
+        $this->data = [
+            'payer' => $client->id,
+            'payee' => $shopKeeper->id,
+            'payment_type' => $creditCard->id,
+            'value' => $value,
+            'description' => sprintf('Debt to %s', $shopKeeper->name)
+        ];
+
+        $this->faker = $faker;
     }
 
     public function testWrongJwtThrowsException(): void
@@ -67,22 +85,7 @@ class TransactionsControllerTest extends TestCase
 
     public function testValidJwtAndTransactionsOk(): string
     {
-        $faker = Factory::create();
-
-        $client = User::where('email', 'client@payment.com')->first();
-        $shopKeeper = User::where('email', 'shopkeeper@payment.com')->first();
-        $creditCard = PaymentType::where('code', 'cc')->first();
-        $value = $faker->randomFloat(2, 10, $client->balance);
-
-        $data = [
-            'payer' => $client->id,
-            'payee' => $shopKeeper->id,
-            'payment_type' => $creditCard->id,
-            'value' => $value,
-            'description' => sprintf('Debt to %s', $shopKeeper->name)
-        ];
-
-        $response = $this->post('/api/transactions', $data, $this->headers);
+        $response = $this->post('/api/transactions', $this->data, $this->headers);
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJson(['message' => 'success']);
@@ -90,4 +93,84 @@ class TransactionsControllerTest extends TestCase
         return $this->validJwt;
     }
 
+    public function testValidJwtAndInvalidPaymentUserReturnsNotFoundResponse(): void
+    {
+        $data = $this->data;
+        $faker = $this->faker;
+
+        $data['payment_type'] = $faker->numberBetween(1000,2000);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+        $response->assertJson(['message' => 'PAYMENT_TYPE_NOT_FOUND']);
+    }
+
+    public function testValidJwtAndInsufficientReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        $faker = $this->faker;
+
+        $data['value'] = $faker->numberBetween(10000,20000);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => 'INSUFFICIENT_BALANCE']);
+    }
+
+    public function testValidJwtAndMissingPayerParamReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        unset($data['payer']);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['payer' => ['MISSING_PARAM']]]);
+    }
+
+    public function testValidJwtAndMissingPayeeParamReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        unset($data['payee']);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['payee' => ['MISSING_PARAM']]]);
+    }
+
+    public function testValidJwtAndMissingPaymentTypeParamReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        unset($data['payment_type']);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['payment_type' => ['MISSING_PARAM']]]);
+    }
+
+    public function testValidJwtAndMissingValueParamReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        unset($data['value']);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['value' => ['MISSING_PARAM']]]);
+    }
+
+    public function testValidJwtAndMissingDescriptionParamReturnsBadRequestResponse(): void
+    {
+        $data = $this->data;
+        unset($data['description']);
+
+        $response = $this->post('/api/transactions', $data, $this->headers);
+
+        $response->assertStatus(Response::HTTP_BAD_REQUEST);
+        $response->assertJson(['message' => ['description' => ['MISSING_PARAM']]]);
+    }
 }

@@ -11,7 +11,7 @@ class IndexControllerTest extends TestCase
     {
         $response = $this->get('/api');
 
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_OK   );
         $response->assertJson([ 'message' => 'success']);
     }
 }

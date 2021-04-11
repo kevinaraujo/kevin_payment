@@ -26,6 +26,57 @@ paths:
         "400":
           description: "Some error"
 
+
+  /api/auth:
+    post:
+      tags:
+        - "Auth"
+      summary: "Authenticate the user"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Object that needs to authenticate a user"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              email:
+                type: "string"
+              password:
+                type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+              access_token:
+                type: "string"
+                default: ""
+        "400":
+          description: "Some error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+        "401":
+          description: "Invalid email and password to authenticate"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                enum:
+                  - "INVALID_CREDENTIALS"
   /api/users:
     post:
       tags:
@@ -39,7 +90,7 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Object that needs to be register a user"
+          description: "Object that needs to register a user"
           required: true
           schema:
             type: "object"
@@ -79,3 +130,128 @@ paths:
                   - "DOCUMENT_EXISTS"
                   - "EMAIL_EXISTS"
 
+  /api/users/{userId}/payments-types:
+    get:
+      tags:
+        - "Users"
+      summary: "Return all payment types available to chosen user"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "userId"
+          in: "path"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+              payment_types:
+                type: "object"
+                default: {}
+        "400":
+          description: "Some error"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+        "404":
+          description: "User not found"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "USER_NOT_FOUND"
+
+  /api/transactions:
+    post:
+      tags:
+        - "Transactions"
+      summary: "Make a transaction between two users"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Object that needs to register a user"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              payer:
+                type: "integer"
+                description: "Payer id"
+              payee:
+                type: "integer"
+                description: "Payee id"
+              value:
+                type: "number"
+                format: "double"
+                default: 10.50
+              payment_type:
+                type: "integer"
+                description: "Payment type id"
+              description:
+                type: "string"
+      responses:
+        "200":
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                default: "success"
+              payment_types:
+                type: "object"
+                default: {}
+        "400":
+          description: "Some error like value is less then 1 "
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "object"
+        "401":
+          description: "Invalid Bearer Token"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                enum:
+                  - "INVALID_CREDENTIALS"
+        "403":
+          description: "Payer should send money to other user"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                enum:
+                  - "TRANSACTION_NOT_ALLOWED"
+        "404":
+          description: "Inexistent Payment type, Payer or payee"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+                enum:
+                  - "PAYMENT_TYPE_NOT_FOUND"
+                  - "PAYER_NOT_FOUND"
+                  - "PAYEE_NOT_FOUND"

@@ -144,7 +144,22 @@ return [
             'required' => 'MISSING_PARAM',
             'min' => 'INVALID_PASSWORD',
             'max' => 'INVALID_PASSWORD'
-        ]
+        ],
+        'payer' => [
+            'required' => 'MISSING_PARAM'
+        ],
+        'payee' => [
+            'required' => 'MISSING_PARAM'
+        ],
+        'payment_type' => [
+            'required' => 'MISSING_PARAM'
+        ],
+        'value' => [
+            'required' => 'MISSING_PARAM'
+        ],
+        'description' => [
+            'required' => 'MISSING_PARAM'
+        ],
     ],
 
     /*

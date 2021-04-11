@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Rules\DocumentRule;
-use App\Rules\EmailRule;
 use App\Services\Format\FormatDocument;
 use App\Services\User\CheckIfUserExists;
 use App\Services\User\SetupUser;
@@ -15,7 +14,7 @@ use \Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         try {
 
@@ -50,9 +49,11 @@ class UserController extends Controller
             ],Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $ex) {
+
             return response()->json([
                 'message' => $ex->getMessage()
             ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+
         }
     }
 
@@ -80,9 +81,11 @@ class UserController extends Controller
             ], Response::HTTP_OK);
 
         } catch (\Exception $ex) {
+
             return response()->json([
                 'message' => $ex->getMessage()
             ], $ex->getCode() ? $ex->getCode() : Response::HTTP_BAD_REQUEST);
+
         }
     }
 }

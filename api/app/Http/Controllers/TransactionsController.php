@@ -6,21 +6,35 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Services\Payment\CheckIfPayerCanSendMoney;
 use App\Services\Payment\CheckIfUserPaymentIsAvailable;
+use App\Services\Payment\CheckIfUsersExist;
 use App\Services\Payment\UpdateUsersBalance;
 use App\Services\Payment\ValidateTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TransactionsController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         try {
 
-            $payer = User::find($request->input('payer'));
-            $payee = User::find($request->input('payee'));
+            $this->validate($request, [
+                'payer' =>'required',
+                'payee' => 'required',
+                'payment_type' => 'required',
+                'value' => 'required',
+                'description' => 'required'
+            ]);
+
+            $payerId = $request->input('payer');
+            $payeeId = $request->input('payee');
+
+            $check = new CheckIfUsersExist($payerId, $payeeId);
+            list($payer, $payee) = $check->execute();
+
             $value = $request->input('value');
             $paymentTypeId = $request->input('payment_type');
 
@@ -52,6 +66,12 @@ class TransactionsController extends Controller
             return response()->json([
                 'message' => 'success'
             ], Response::HTTP_CREATED);
+
+        } catch (ValidationException $ex ) {
+
+            return response()->json([
+                'message' => $ex->errors()
+            ], Response::HTTP_BAD_REQUEST);
 
         } catch (\Exception $ex) {
             DB::rollBack();

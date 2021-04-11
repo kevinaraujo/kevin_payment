@@ -42,6 +42,20 @@ class CheckIfPayerCanSendMoneyTest extends TestCase
         $response = $check->execute();
     }
 
+    public function testValueIsNotEnoughToSendThrowsException(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('INSUFFICIENT_VALUE');
+        $this->expectExceptionCode(Response::HTTP_BAD_REQUEST);
+
+        $payer = User::where('email', 'client@payment.com')->first();
+        $payee = User::where('email', 'shopkeeper@payment.com')->first();
+        $value = 0;
+
+        $check = new CheckIfPayerCanSendMoney($payer, $payee, $value);
+        $response = $check->execute();
+    }
+
     public function testPayerHasNotMoneyEnoughToSendThrowsException(): void
     {
         $this->expectException(\Exception::class);
@@ -63,7 +77,7 @@ class CheckIfPayerCanSendMoneyTest extends TestCase
         $payee = User::where('email', 'shopkeeper@payment.com')->first();
 
         $faker = Factory::create();
-        $value = $faker->randomFloat(2,0, $payer->balance);
+        $value = $faker->randomFloat(2,0, 50);
 
         $check = new CheckIfPayerCanSendMoney($payer, $payee, $value);
         $response = $check->execute();

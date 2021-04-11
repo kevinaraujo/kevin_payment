@@ -33,4 +33,16 @@ class UserIdentifierFactoryTest extends TestCase
 
         $this->assertInstanceOf(ShopKeeper::class, $class);
     }
+
+    public function testShortDocumentNumberThrowsException() : void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('INVALID_DOCUMENT');
+
+        $faker = Factory::create();
+        $faker->addProvider(new Company($faker));
+        $cpf = $faker->randomNumber(5);
+
+        $class = UserIdentifierFactory::execute($cpf);
+    }
 }

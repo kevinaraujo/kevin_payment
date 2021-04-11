@@ -1,163 +1,104 @@
 {
-	"id": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-	"name": "kevin_payment",
-	"description": "",
-	"order": [
-		"e8df7af6-85be-99b7-6372-048b152e9ebd",
-		"c19206a9-2cb3-f14b-118b-dbe0e301d83b",
-		"3bfb455b-08c9-3316-d8da-0e5f4c1dfbeb",
-		"73fa73f2-301d-b25b-78ac-0c20b55f3a7e",
-		"d182a9a3-1731-07f6-08eb-09cb1deb404d"
-	],
-	"folders": [],
-	"folders_order": [],
-	"timestamp": 1617748354472,
-	"owner": "2314778",
-	"public": false,
-	"requests": [
+	"variables": [],
+	"info": {
+		"name": "kevin_payment",
+		"_postman_id": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
 		{
-			"id": "3bfb455b-08c9-3316-d8da-0e5f4c1dfbeb",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:8010/api/auth",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1617933139299,
-			"name": "Login",
-			"description": "",
-			"collectionId": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-			"responses": [],
-			"rawModeData": "{\n\t\"email\": \"shopkeeper@payment.com\",\n\t\"password\": \"12345678\"\n}"
-		},
-		{
-			"id": "73fa73f2-301d-b25b-78ac-0c20b55f3a7e",
-			"headers": "Content-Type: application/json\nAuthorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTgwMDEwMjgsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.Hy_vnlOvWQLR_l3TAmq-z15Wgs089LMG-Aech_XZME4\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+			"name": "User - Register",
+			"request": {
+				"url": "http://localhost:8010/api/users",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"d\",\n\t\"document\": \"41032286879\",\n\t\"email\": \"shopkeeper@payment.com\",\n\t\"password\": \"12345678\"\n}"
 				},
-				{
-					"key": "Authorization",
-					"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTgwMDEwMjgsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.Hy_vnlOvWQLR_l3TAmq-z15Wgs089LMG-Aech_XZME4",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:8010/api/transactions",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1618001853957,
-			"name": "Make a Transaction",
-			"description": "",
-			"collectionId": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-			"responses": [],
-			"rawModeData": "{\n\t\"payer\" : 1,\n\t\"payee\" : 2,\n\t\"value\" : 830.00,\n\t\"payment_type\" : 1,\n\t\"description\": \"teste\"\n}"
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "c19206a9-2cb3-f14b-118b-dbe0e301d83b",
-			"headers": "",
-			"headerData": [],
-			"url": "http://localhost:8010/api",
-			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"preRequestScript": null,
-			"method": "GET",
-			"collectionId": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-			"data": null,
-			"dataMode": "params",
 			"name": "Health Check",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1617799461079,
-			"version": 2,
-			"responses": [],
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {}
+			"request": {
+				"url": "http://localhost:8010/api",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		},
 		{
-			"id": "d182a9a3-1731-07f6-08eb-09cb1deb404d",
-			"headers": "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTc5OTkwMjQsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.sl_sBnzSYlHTW7xE3DMDdaxq-WeqRVCmKnbN69ACNNQ\n",
-			"headerData": [
-				{
-					"key": "Authorization",
-					"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTc5OTkwMjQsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.sl_sBnzSYlHTW7xE3DMDdaxq-WeqRVCmKnbN69ACNNQ",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:8010/api/users/2/payments-types",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": null,
-			"dataMode": "params",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1618001856465,
+			"name": "User - Authenticate",
+			"request": {
+				"url": "http://localhost:8010/api/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"shopkeeper@payment.com\",\n\t\"password\": \"12345678\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Make a Transaction",
+			"request": {
+				"url": "http://localhost:8010/api/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTgwMDEwMjgsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.Hy_vnlOvWQLR_l3TAmq-z15Wgs089LMG-Aech_XZME4",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"payer\" : 1,\n\t\"payee\" : 2,\n\t\"value\" : 830.00,\n\t\"payment_type\" : 1,\n\t\"description\": \"teste\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "User - Get Payments Types Available",
-			"description": "",
-			"collectionId": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-			"responses": []
-		},
-		{
-			"id": "e8df7af6-85be-99b7-6372-048b152e9ebd",
-			"headers": "Content-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://localhost:8010/api/users",
-			"queryParams": [],
-			"preRequestScript": null,
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"tests": null,
-			"currentHelper": "normal",
-			"helperAttributes": {},
-			"time": 1617997222946,
-			"name": "Register a User",
-			"description": "",
-			"collectionId": "5c8ac812-ffcb-13ab-5dc5-ff8f28e76383",
-			"responses": [],
-			"rawModeData": "{\n\t\"name\": \"d\",\n\t\"document\": \"41032286879\",\n\t\"email\": \"shopkeeper@payment.com\",\n\t\"password\": \"12345678\"\n}"
+			"request": {
+				"url": "http://localhost:8010/api/users/2/payments-types",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTc5OTkwMjQsInVzZXIiOiJ7XCJuYW1lXCI6XCJNYXJhaXNhIFBcXHUwMGU5cm9sYSBSb3NhIEpyLlwiLFwiZW1haWxcIjpcInNob3BrZWVwZXJAcGF5bWVudC5jb21cIixcImRvY3VtZW50XCI6XCI1NTAwNjY3NDAwMDE5NVwifSJ9.sl_sBnzSYlHTW7xE3DMDdaxq-WeqRVCmKnbN69ACNNQ",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

@@ -20,6 +20,13 @@ class CheckIfPayerCanSendMoney
 
     public function execute(): bool
     {
+        if ($this->value <= 0) {
+            throw new \Exception(
+                'INSUFFICIENT_VALUE',
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         if (
             $this->payee->id == $this->payer->id ||
             !$this->payer->types->sends_money
